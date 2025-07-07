@@ -366,5 +366,34 @@ if (typeof json_parcelatargz_part2 !== 'undefined') {
         map.addLayer(layer_030_subparcelatargz_3);
         setBounds();
         </script>
+        <script>
+  // Lista de archivos GeoJSON a cargar
+  const archivosGeoJSON = [
+    "data/archivo1.geojson",
+    "data/archivo2.geojson",
+    "data/archivo3.geojson"
+    // Agregá acá todos los que necesites
+  ];
+
+  archivosGeoJSON.forEach((ruta) => {
+    const capa = new L.GeoJSON.AJAX(ruta, {
+      onEachFeature: function (feature, layer) {
+        let popupContent = "";
+        for (const key in feature.properties) {
+          popupContent += `<strong>${key}</strong>: ${feature.properties[key]}<br>`;
+        }
+        layer.bindPopup(popupContent);
+      },
+      style: function (feature) {
+        return {
+          color: "#3388ff",
+          weight: 1
+        };
+      }
+    });
+    capa.addTo(map);
+  });
+</script>
+
     </body>
 </html>
