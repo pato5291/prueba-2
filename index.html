@@ -366,34 +366,40 @@ if (typeof json_parcelatargz_part2 !== 'undefined') {
         map.addLayer(layer_030_subparcelatargz_3);
         setBounds();
         </script>
-        <script>
-  // Lista de archivos GeoJSON a cargar
+       <script>
+  // Lista de archivos GeoJSON a cargar desde data/juntos/
   const archivosGeoJSON = [
-    "data/archivo1.geojson",
-    "data/archivo2.geojson",
-    "data/archivo3.geojson"
-    // Agregá acá todos los que necesites
+    "data/juntos/archivo1.geojson",
+    "data/juntos/archivo2.geojson"
+    // podés agregar más si querés
   ];
 
   archivosGeoJSON.forEach((ruta) => {
-    const capa = new L.GeoJSON.AJAX(ruta, {
-      onEachFeature: function (feature, layer) {
-        let popupContent = "";
-        for (const key in feature.properties) {
-          popupContent += `<strong>${key}</strong>: ${feature.properties[key]}<br>`;
-        }
-        layer.bindPopup(popupContent);
-      },
-      style: function (feature) {
-        return {
-          color: "#3388ff",
-          weight: 1
-        };
-      }
-    });
-    capa.addTo(map);
+    fetch(ruta)
+      .then((response) => response.json())
+      .then((data) => {
+        L.geoJSON(data, {
+          onEachFeature: function (feature, layer) {
+            let popupContent = "";
+            for (const key in feature.properties) {
+              popupContent += `<strong>${key}</strong>: ${feature.properties[key]}<br>`;
+            }
+            layer.bindPopup(popupContent);
+          },
+          style: function (feature) {
+            return {
+              color: "#3388ff",
+              weight: 1
+            };
+          }
+        }).addTo(map);
+      })
+      .catch((error) => {
+        console.error("Error cargando:", ruta, error);
+      });
   });
 </script>
+
 
     </body>
 </html>
