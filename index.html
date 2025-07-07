@@ -31,8 +31,6 @@
         <script src="js/rbush.min.js"></script>
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
-        <script src="data/parcelatargz_part1.js"></script>
-        <script src="data/parcelatargz_part2.js"></script>
         <script src="data/030_chacratargz_1.js"></script>
         <script src="data/030_quintatargz_2.js"></script>
         <script src="data/030_subparcelatargz_3.js"></script>
@@ -367,18 +365,16 @@ if (typeof json_parcelatargz_part2 !== 'undefined') {
         setBounds();
         </script>
        <script>
-  // Lista de archivos GeoJSON a cargar desde data/juntos/
   const archivosGeoJSON = [
     "data/juntos/archivo1.geojson",
     "data/juntos/archivo2.geojson"
-    // podés agregar más si querés
   ];
 
   archivosGeoJSON.forEach((ruta) => {
     fetch(ruta)
-      .then((response) => response.json())
+      .then((r) => r.json())
       .then((data) => {
-        L.geoJSON(data, {
+        const capa = L.geoJSON(data, {
           onEachFeature: function (feature, layer) {
             let popupContent = "";
             for (const key in feature.properties) {
@@ -386,17 +382,13 @@ if (typeof json_parcelatargz_part2 !== 'undefined') {
             }
             layer.bindPopup(popupContent);
           },
-          style: function (feature) {
-            return {
-              color: "#3388ff",
-              weight: 1
-            };
+          style: {
+            color: "#3388ff",
+            weight: 1
           }
         }).addTo(map);
       })
-      .catch((error) => {
-        console.error("Error cargando:", ruta, error);
-      });
+      .catch((err) => console.error("Error cargando archivo:", ruta, err));
   });
 </script>
 
